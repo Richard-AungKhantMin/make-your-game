@@ -1,5 +1,6 @@
 const gameBox = document.getElementById("gBox")
 const startBox = document.getElementById("startSection")
+const scoreBox = document.getElementById("score")
 const timeHTML = document.getElementById("time")
 const bat = document.getElementById("bat")
 const pauseSection = document.getElementById("pauseSection");
@@ -39,6 +40,8 @@ function checkHit(){
             batInfo.top < catInfo.bottom &&
             batInfo.bottom > catInfo.top
         ) {
+            score += Math.ceil(Math.random()*50)
+            scoreBox.innerText = `Score: ${score}`
             tomScreamAudio.play()
             cat.dispatchEvent(new Event("hit"));
         }

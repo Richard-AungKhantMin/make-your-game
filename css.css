@@ -33,6 +33,15 @@ body {
     font-size: 20px;
 }
 
+#score {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 610px; /* Place it just below the pause button */
+    color: white;
+    font-size: 20px;
+}
+
 #bat{
     position: absolute;
     height: 120px;
