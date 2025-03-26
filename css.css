@@ -44,8 +44,10 @@ body {
 
 #bat{
     position: absolute;
-    height: 120px;
-    width: 120px;
+    max-width: 120px;
+    max-height: 120px;
+    height: 12vw;
+    width: 12vw;
     display: block;
     background-image: url('bat.png');
     background-size: cover;
