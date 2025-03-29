@@ -293,8 +293,6 @@ function startGame(){
         bat.style.display = "block";
         x = (gameBox.clientWidth - bat.clientWidth) / 2
         y = (gameBox.clientHeight - bat.clientHeight) / 2
-        console.log(y, x)
-        console.log(bat.clientHeight, bat.clientWidth)
 
         bat.style.left = `${x}px`
         bat.style.top = `${y}px`
