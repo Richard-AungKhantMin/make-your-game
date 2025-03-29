@@ -48,7 +48,7 @@ body {
     max-height: 120px;
     height: 12vw;
     width: 12vw;
-    display: block;
+    display: none;
     background-image: url('bat.png');
     background-size: cover;
     z-index: 10;
@@ -92,12 +92,12 @@ body {
 }
 
 /* Restart button style */
-#restart {
+.restart {
     background-color: #FF4747;
     color: white;
 }
 
-#restart:hover {
+.restart:hover {
     background-color: #D43F3F;
 }
 

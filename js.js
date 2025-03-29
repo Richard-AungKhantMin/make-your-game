@@ -5,20 +5,24 @@ const timeHTML = document.getElementById("time")
 const bat = document.getElementById("bat")
 const pauseSection = document.getElementById("pauseSection");
 const resume = document.getElementById("resume");
-const restart = document.getElementById("restart");
+const restartArr = document.querySelectorAll(".restart-button");
 const bananaAudio = document.getElementById("banana");
 const bonkAudio = document.getElementById("bonk");
 const gameOverAudio = document.getElementById("gameOver");
 const tomScreamAudio = document.getElementById("tomScream");
 const happiAudio = document.getElementById("happi")
-let catInterval
+
+let happiInterval;
+let catInterval;
+let timeInterval;
+let batMoveInterval;
 let isPaused = false
 let time = 0
 let reqAnimation = null
-let reqBat = null
 let speed = 3
 let score = 0
 let lives = 5
+let isRestart = false
 
 let x = (gameBox.clientWidth - bat.clientWidth) / 2
 let y = (gameBox.clientHeight - bat.clientHeight) / 2
@@ -73,7 +77,7 @@ function controlBat(){
     if (e.key.toLowerCase() === "s" && y < gameBox.clientHeight-(bat.clientHeight/2)) y += bonkSpeed;
     if (e.key.toLowerCase() === "w" && y > 0) y -= bonkSpeed;
 
-  const batMove = setInterval(() =>{
+  batMoveInterval = setInterval(() =>{
     let BatX = parseInt(bat.style.left);
     let BatY = parseInt(bat.style.top)
     const dx = x - BatX;
@@ -117,13 +121,10 @@ function controlBat(){
 }
 
 function manageTime(){
-    const timerID = setInterval(()=>{
+    timeInterval = setInterval(()=>{
         if (!isPaused){
             time++
         }
-       /*  if (time%5 === 0){
-            speed++
-        } */
         timeHTML.innerHTML = `Time: ${time}s`
     }, 1000)
 }
@@ -144,6 +145,7 @@ function pause(){
             pauseSection.style.display = "block";
             cancelAnimationFrame(reqAnimation)
         }
+
     })
 
     document.addEventListener("keydown", (event) => {
@@ -154,10 +156,13 @@ function pause(){
                 bat.style.display = "block";
                 isPaused = false; 
             } else {
+                cancelAnimationFrame(reqAnimation)
                 pauseSection.style.display = "block";
                 bat.style.display = "none";
                 isPaused = true; 
             }
+
+            console.log("Speed from pause func",speed)
         }
     });
 }
@@ -195,10 +200,11 @@ cat.addEventListener("click", () => {
 }
 
 function moveCats() {
-
     const cats = document.querySelectorAll(".cat");
-    const maxRight = gameBox.clientWidth - 80;
-
+    let maxRight;
+    if (cats.length > 0){
+        maxRight = gameBox.clientWidth - (cats[0].clientWidth);
+    }
     cats.forEach((cat) => {
     let currentLeft = parseInt(cat.style.left);
 
@@ -207,8 +213,6 @@ function moveCats() {
             cat.style.left = `${currentLeft + speed}px`;
         } else {
             cat.style.backgroundImage = `url(gameOver.png)`;
-            cat.style.height="100px"
-             cat.style.width="100px"
             gameOverAudio.play() 
             setTimeout(() => {
                 cat.remove();
@@ -217,34 +221,69 @@ function moveCats() {
     }})
     
     if (!isPaused) {
+        cancelAnimationFrame(reqAnimation)
        reqAnimation = requestAnimationFrame(moveCats);
+       console.log("Speed from moveCats", speed)
     }else{
         cancelAnimationFrame(reqAnimation)
     }
 }
 
-
-function main(){
+function restart(){
     
+score = 0
+lives = 5
+time = 0
+isPaused = false
+speed = 3
+scoreBox.innerText = `Score: ${score}`
+timeHTML.innerHTML = `Time: ${time}s`
+
+x = (gameBox.clientWidth - bat.clientWidth) / 2
+y = (gameBox.clientHeight - bat.clientHeight) / 2
+bat.style.left = `${x}px`
+bat.style.top = `${y}px`
+
+clearInterval(timeInterval)
+clearInterval(happiInterval)
+clearInterval(catInterval)
+cancelAnimationFrame(reqAnimation)
+document.querySelectorAll(".cat").forEach(cat => cat.remove())
+
+pauseSection.style.display = "none"
+startBox.style.display = "block"
+bat.style.display = "none"
+console.log("Set everything back to 0s")
+
+}
+
+function startGame(){
+
+    //User control event listener and frames doesn't need to be reset because they're controlled by the user
+    pause()
     controlBat()
 
+
     startBox.addEventListener("click", function () {
-        setInterval(() =>{
+        manageTime()
+        bat.style.display = "block";
+        
+        happiInterval = setInterval(() =>{
             isPaused ? happiAudio.pause():happiAudio.play()
         }, 10)
-        happiAudio.play()
-        document.getElementById("startSection").style.display = "none";
+        startBox.style.display = "none";
 
         clearInterval(catInterval);
         catInterval = setInterval(() => {
             if (!isPaused) createCat();
     
         }, 3000);
-        manageTime()
-        pause()
-    });
-    
-    reqAnimation = requestAnimationFrame(moveCats)
+
+        reqAnimation = requestAnimationFrame(moveCats)
+
+        document.getElementById("r1").addEventListener("click", restart)
+        console.log(speed)
+        }); 
 }
 
-main()
+startGame()
