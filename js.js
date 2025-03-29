@@ -2,10 +2,11 @@ const gameBox = document.getElementById("gBox")
 const startBox = document.getElementById("startSection")
 const scoreBox = document.getElementById("score")
 const timeHTML = document.getElementById("time")
+const livesHTML = document.getElementById("lives")
 const bat = document.getElementById("bat")
 const pauseSection = document.getElementById("pauseSection");
 const resume = document.getElementById("resume");
-const restartArr = document.querySelectorAll(".restart-button");
+const gameOverBox = document.getElementById("over")
 const bananaAudio = document.getElementById("banana");
 const bonkAudio = document.getElementById("bonk");
 const gameOverAudio = document.getElementById("gameOver");
@@ -13,9 +14,11 @@ const tomScreamAudio = document.getElementById("tomScream");
 const happiAudio = document.getElementById("happi")
 
 let happiInterval;
+let gameOverInterval;
 let catInterval;
 let timeInterval;
 let batMoveInterval;
+let missed = false;
 let isGameStarted = false;
 let isPaused = false
 let time = 0
@@ -210,6 +213,7 @@ function moveCats() {
     if (cats.length > 0){
         maxRight = gameBox.clientWidth - (cats[0].clientWidth);
     }
+
     cats.forEach((cat) => {
     let currentLeft = parseInt(cat.style.left);
 
@@ -217,13 +221,23 @@ function moveCats() {
         if (currentLeft < maxRight) {
             cat.style.left = `${currentLeft + speed}px`;
         } else {
-            cat.style.backgroundImage = `url(gameOver.png)`;
-            gameOverAudio.play() 
-            setTimeout(() => {
-                cat.remove();
-            }, 3000); 
+
+            if (!cat.dataset.removed) {
+                lives--;
+                livesHTML.innerText = `Lives: ${lives}`;
+                cat.style.backgroundImage = `url(gameOver.png)`;
+                gameOverAudio.play();
+
+                cat.dataset.removed = "true";
+
+                setTimeout(() => {
+                    cat.remove();
+                }, 3000); 
+            }
         }
-    }})
+    }
+}
+)
     
     if (!isPaused) {
         cancelAnimationFrame(reqAnimation)
@@ -243,6 +257,7 @@ isGameStarted = false
 speed = 3
 scoreBox.innerText = `Score: ${score}`
 timeHTML.innerHTML = `Time: ${time}s`
+livesHTML.innerText = `Lives: ${lives}`
 
 x = (gameBox.clientWidth - bat.clientWidth) / 2
 y = (gameBox.clientHeight - bat.clientHeight) / 2
@@ -252,12 +267,14 @@ bat.style.top = `${y}px`
 clearInterval(timeInterval)
 clearInterval(happiInterval)
 clearInterval(catInterval)
+clearInterval(gameOverInterval)
 cancelAnimationFrame(reqAnimation)
 document.querySelectorAll(".cat").forEach(cat => cat.remove())
 
 pauseSection.style.display = "none"
 startBox.style.display = "block"
 bat.style.display = "none"
+  gameOverBox.style.display = "none"
 
 }
 
@@ -269,6 +286,7 @@ function startGame(){
 
 
     startBox.addEventListener("click", function () {
+        startBox.style.display = "none";
         isGameStarted = true;
         manageTime()
 
@@ -285,13 +303,21 @@ function startGame(){
         happiInterval = setInterval(() =>{
             isPaused ? happiAudio.pause():happiAudio.play()
         }, 10)
-        startBox.style.display = "none";
+        
 
         clearInterval(catInterval);
         catInterval = setInterval(() => {
             if (!isPaused) createCat();
     
         }, 3000);
+
+        gameOverInterval = setInterval(()=>{
+            if (lives === 0){
+                gameOverBox.style.display = "block"
+                isGameStarted = false
+                isPaused = true
+            }
+        }, 1)
 
         reqAnimation = requestAnimationFrame(moveCats)
 
