@@ -192,7 +192,11 @@ function createCat() {
     const pics = ["cry1.png", "cry2.png", "cry3.png"]
     const ranPic = pics[Math.floor(Math.random()*3)]
     cat.style.transition = "transform 0.5s"; 
-    cat.style.backgroundImage = `url(${ranPic})`; 
+    if (!cat.dataset.hit){
+        cat.style.backgroundImage = `url(${ranPic})`; 
+        cat.dataset.hit = "true"
+    }
+   
 
     setTimeout(() => {
         cat.remove();
