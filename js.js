@@ -16,6 +16,7 @@ let happiInterval;
 let catInterval;
 let timeInterval;
 let batMoveInterval;
+let isGameStarted = false;
 let isPaused = false
 let time = 0
 let reqAnimation = null
@@ -24,11 +25,7 @@ let score = 0
 let lives = 5
 let isRestart = false
 
-let x = (gameBox.clientWidth - bat.clientWidth) / 2
-let y = (gameBox.clientHeight - bat.clientHeight) / 2
-
-bat.style.left = `${x}px`
-bat.style.top = `${y}px`
+let x, y;
 let bonkSpeed = 50
  
 function checkHit(){
@@ -72,11 +69,15 @@ function checkHit(){
 function controlBat(){
 
     document.addEventListener("keydown", (e)=>{
-        if (e.key.toLowerCase() === "d" && x < gameBox.clientWidth-bat.clientWidth) x += bonkSpeed;
+
+if (isGameStarted){
+    if (e.key.toLowerCase() === "d" && x < gameBox.clientWidth-bat.clientWidth) x += bonkSpeed;
     if (e.key.toLowerCase() === "a" && x > 0) x -= bonkSpeed;
     if (e.key.toLowerCase() === "s" && y < gameBox.clientHeight-(bat.clientHeight/2)) y += bonkSpeed;
     if (e.key.toLowerCase() === "w" && y > 0) y -= bonkSpeed;
 
+}
+    
   batMoveInterval = setInterval(() =>{
     let BatX = parseInt(bat.style.left);
     let BatY = parseInt(bat.style.top)
@@ -108,14 +109,17 @@ function controlBat(){
   }, 1)
         
     if (e.key === "Enter") {
-        bonkAudio.pause()
-        bonkAudio.play()
-        checkHit();
-        bat.style.transition = "transform 0.1s ease";
-                bat.style.transform = "rotate(-45deg)";
+        if (!isPaused){
+            bonkAudio.pause()
+            bonkAudio.play()
+            checkHit();
+            bat.style.transition = "transform 0.1s ease";
+            bat.style.transform = "rotate(-45deg)";
                 setTimeout(() => {
-                    bat.style.transform = "rotate(0deg)";
-                }, 100);
+           bat.style.transform = "rotate(0deg)";
+            }, 100);
+        }
+        
     }
     })
 }
@@ -139,7 +143,7 @@ function pause(){
     });
 
     document.addEventListener("visibilitychange", () =>{
-        if (document.hidden){
+        if (document.hidden && isGameStarted){
             isPaused = true
             bat.style.display = "none";
             pauseSection.style.display = "block";
@@ -149,20 +153,21 @@ function pause(){
     })
 
     document.addEventListener("keydown", (event) => {
-        if (event.key === "Escape" || event.key === " ") {
-            if (pauseSection.style.display === "block") {
-                reqAnimation = requestAnimationFrame(moveCats);
-                pauseSection.style.display = "none";
-                bat.style.display = "block";
-                isPaused = false; 
-            } else {
-                cancelAnimationFrame(reqAnimation)
-                pauseSection.style.display = "block";
-                bat.style.display = "none";
-                isPaused = true; 
-            }
+        if (isGameStarted){
+            if (event.key === "Escape" || event.key === " ") {
 
-            console.log("Speed from pause func",speed)
+                if (pauseSection.style.display === "block") {
+                    reqAnimation = requestAnimationFrame(moveCats);
+                    pauseSection.style.display = "none";
+                    bat.style.display = "block";
+                    isPaused = false; 
+                } else {
+                    cancelAnimationFrame(reqAnimation)
+                    pauseSection.style.display = "block";
+                    bat.style.display = "none";
+                    isPaused = true; 
+                }
+            }
         }
     });
 }
@@ -223,7 +228,6 @@ function moveCats() {
     if (!isPaused) {
         cancelAnimationFrame(reqAnimation)
        reqAnimation = requestAnimationFrame(moveCats);
-       console.log("Speed from moveCats", speed)
     }else{
         cancelAnimationFrame(reqAnimation)
     }
@@ -235,6 +239,7 @@ score = 0
 lives = 5
 time = 0
 isPaused = false
+isGameStarted = false
 speed = 3
 scoreBox.innerText = `Score: ${score}`
 timeHTML.innerHTML = `Time: ${time}s`
@@ -253,7 +258,6 @@ document.querySelectorAll(".cat").forEach(cat => cat.remove())
 pauseSection.style.display = "none"
 startBox.style.display = "block"
 bat.style.display = "none"
-console.log("Set everything back to 0s")
 
 }
 
@@ -265,8 +269,18 @@ function startGame(){
 
 
     startBox.addEventListener("click", function () {
+        isGameStarted = true;
         manageTime()
+
         bat.style.display = "block";
+        x = (gameBox.clientWidth - bat.clientWidth) / 2
+        y = (gameBox.clientHeight - bat.clientHeight) / 2
+        console.log(y, x)
+        console.log(bat.clientHeight, bat.clientWidth)
+
+        bat.style.left = `${x}px`
+        bat.style.top = `${y}px`
+        
         
         happiInterval = setInterval(() =>{
             isPaused ? happiAudio.pause():happiAudio.play()
@@ -282,7 +296,8 @@ function startGame(){
         reqAnimation = requestAnimationFrame(moveCats)
 
         document.getElementById("r1").addEventListener("click", restart)
-        console.log(speed)
+        document.getElementById("r2").addEventListener("click", restart)
+
         }); 
 }
 
