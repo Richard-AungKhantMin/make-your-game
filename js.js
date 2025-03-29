@@ -44,7 +44,7 @@ function checkHit(){
             batInfo.top < catInfo.bottom &&
             batInfo.bottom > catInfo.top
         ) {
-            score += Math.ceil(Math.random()*50)
+            score += Math.ceil((gameBox.clientWidth-parseInt(cat.style.left))*0.1)
             scoreBox.innerText = `Score: ${score}`
             tomScreamAudio.play()
             cat.dispatchEvent(new Event("hit"));
