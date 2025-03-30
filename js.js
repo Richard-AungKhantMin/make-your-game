@@ -60,9 +60,11 @@ function checkHit(){
     ) {
         isPaused = !isPaused
         if (isPaused){
+            gameBox.style.backgroundImage =  `url(ice.png)`
             cancelAnimationFrame(moveCats)
         }else{
             reqAnimation = requestAnimationFrame(moveCats)
+            gameBox.style.backgroundImage =  "none"
         }
     }
 
@@ -115,14 +117,13 @@ if (isGameStarted){
         if (!isPaused){
             bonkAudio.pause()
             bonkAudio.play()
-            checkHit();
-            bat.style.transition = "transform 0.1s ease";
-            bat.style.transform = "rotate(-45deg)";
-                setTimeout(() => {
-           bat.style.transform = "rotate(0deg)";
-            }, 100);
         }
-        
+        checkHit();
+        bat.style.transition = "transform 0.1s ease";
+        bat.style.transform = "rotate(-45deg)";
+            setTimeout(() => {
+       bat.style.transform = "rotate(0deg)";
+        }, 100);
     }
     })
 }
