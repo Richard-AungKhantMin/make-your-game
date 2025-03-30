@@ -141,6 +141,7 @@ function pause(){
   
     resume.addEventListener("click", () => {
         isPaused = false
+        gameBox.style.backgroundImage =  "none"
         pauseSection.style.display = "none"
         bat.style.display = "block";
         reqAnimation = requestAnimationFrame(moveCats)
@@ -149,6 +150,7 @@ function pause(){
     document.addEventListener("visibilitychange", () =>{
         if (document.hidden && isGameStarted){
             isPaused = true
+            gameBox.style.backgroundImage =  "none"
             bat.style.display = "none";
             pauseSection.style.display = "block";
             cancelAnimationFrame(reqAnimation)
@@ -162,6 +164,7 @@ function pause(){
 
                 if (pauseSection.style.display === "block") {
                     reqAnimation = requestAnimationFrame(moveCats);
+                    gameBox.style.backgroundImage =  "none"
                     pauseSection.style.display = "none";
                     bat.style.display = "block";
                     isPaused = false; 
