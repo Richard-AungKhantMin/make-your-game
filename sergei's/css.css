@@ -1,0 +1,256 @@
+body {
+    margin: 0;
+    overflow: hidden;
+    background-color: rgb(2, 27, 39);
+}
+
+#gBox {
+    position: fixed;          /* Fix the box relative to the screen */
+    top: 20px;                   /* Align it to the top of the screen */
+    left: 50%;                /* Position it at the center horizontally */
+    transform: translateX(-50%);  /* Adjust for exact centering */
+    width: 960px;             /* Width set to 800px */
+    height: 540px;            /* Height set to maintain 16:9 ratio */
+    background-color: rgb(248, 250, 225);  /* Background color */
+}
+
+.cat {
+    position: absolute;
+    width: 80px;
+    height: 80px;
+    background-image: url('cat.png'); 
+    background-size: cover;
+    transition: transform 0.2s ease-in-out;
+    cursor: pointer;
+}
+
+#time, #score, #lives {
+    color: white;
+    font-size: 22px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    font-weight: bold;
+}
+
+#details {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 570px;
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 10px 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+#bat{
+    position: absolute;
+    height: 120px;
+    width: 120px;
+    display: none;
+    background-image: url('bat.png');
+    background-size: cover;
+    z-index: 10;
+}
+
+#pauseSection {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    padding: 20px 30px;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.7);
+    z-index: 11;
+    display: none; /* Hidden by default */
+    text-align: center;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+/* Style the buttons */
+#pauseSection button {
+    padding: 10px 20px;
+    margin: 10px;
+    font-size: 18px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+/* Resume button style */
+#pause {
+    background-color: #4CAF50;
+    color: white;
+}
+
+#pause:hover {
+    background-color: #45a049;
+}
+
+/* Restart button style */
+#r1 {
+    background-color: #FF4747;
+    color: white;
+}
+
+.restart:hover {
+    background-color: #D43F3F;
+}
+
+/* Optional fade-in animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -45%);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%);
+    }
+}
+
+#startSection {
+    display: block;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.85);
+    color: #fff;
+    padding: 30px 40px;
+    border-radius: 15px;
+    box-shadow: 0 0 25px rgba(0, 0, 0, 0.7);
+    z-index: 11;
+    text-align: center;
+    animation: fadeIn 0.3s ease-in-out;
+    min-width: 350px;
+}
+
+#startSection h1 {
+    color: #f8ca4d;
+    font-size: 32px;
+    margin-top: 0;
+    margin-bottom: 20px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+#startButton {
+    background: #28a745;
+    color: #fff;
+    border: none;
+    padding: 15px 30px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 20px;
+    margin-top: 20px;
+    transition: all 0.3s ease;
+    font-weight: bold;
+    box-shadow: 0 4px 0 #1c7430;
+}
+
+#startButton:hover {
+    background: #218838;
+    transform: translateY(2px);
+    box-shadow: 0 2px 0 #1c7430;
+}
+
+#instructions {
+    font-size: 18px;
+    color: #ddd;
+    margin-bottom: 20px;
+    line-height: 1.6;
+    text-align: center;
+    max-width: 400px;
+}
+
+#over {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.9);
+    color: #fff;
+    padding: 30px 40px;
+    border-radius: 15px;
+    box-shadow: 0 0 25px rgba(0, 0, 0, 0.8);
+    z-index: 11;
+    display: none;
+    text-align: center;
+    animation: bounceIn 0.5s ease-in-out;
+    min-width: 350px;
+}
+
+@keyframes bounceIn {
+    0% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.8);
+    }
+    70% {
+        transform: translate(-50%, -50%) scale(1.05);
+    }
+    100% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+    }
+}
+
+/* Style the "Game Over" text */
+#gameOverText {
+    font-size: 36px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #ff4747;
+    text-shadow: 0 0 10px rgba(255, 71, 71, 0.7);
+    letter-spacing: 2px;
+    animation: blink 1.5s infinite;
+}
+
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}
+
+/* Style the restart button */
+#r2 {
+    padding: 15px 30px;
+    font-size: 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    background-color: #FF4747; 
+    color: white;
+    transition: all 0.2s;
+    font-weight: bold;
+    box-shadow: 0 4px 0 #c62828;
+}
+
+#r2:hover {
+    background-color: #D43F3F;
+    transform: translateY(2px);
+    box-shadow: 0 2px 0 #c62828;
+}
+
+/* Heart animation for lives */
+@keyframes heartbeat {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+}
+
+#lives span {
+    display: inline-block;
+    animation: heartbeat 1s infinite;
+    animation-delay: calc(var(--i) * 0.2s);
+}
+
+#lives span:nth-child(1) { --i: 0; }
+#lives span:nth-child(2) { --i: 1; }
+#lives span:nth-child(3) { --i: 2; }
+#lives span:nth-child(4) { --i: 3; }
+#lives span:nth-child(5) { --i: 4; }
+
