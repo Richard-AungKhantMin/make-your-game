@@ -206,7 +206,8 @@ body {
 @media screen and (min-width: 1024px) and (max-width: 1440px) {
 
     #gBox {
-        width: 800px;
+        width: 700px;             
+        aspect-ratio: 16 / 9;
     }
 
     .cat{
