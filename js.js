@@ -79,8 +79,14 @@ function controlBat(){
 if (isGameStarted){
     if (e.key.toLowerCase() === "d" && x < gameBox.clientWidth-bat.clientWidth) x += bonkSpeed;
     if (e.key.toLowerCase() === "a" && x > 0) x -= bonkSpeed;
-    if (e.key.toLowerCase() === "s" && y < gameBox.clientHeight-(bat.clientHeight/2)) y += bonkSpeed;
-    if (e.key.toLowerCase() === "w" && y > 0) {
+    if (e.key.toLowerCase() === "s") {
+        if (y+bonkSpeed < gameBox.clientHeight-(bat.clientHeight/2)){
+            y += bonkSpeed;
+        }else{
+            y = gameBox.clientHeight-(bat.clientHeight/2)
+        }
+    };
+    if (e.key.toLowerCase() === "w") {
         if (y-bonkSpeed > 0){
             y -= bonkSpeed;
         }else{
