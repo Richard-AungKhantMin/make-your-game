@@ -206,7 +206,7 @@ body {
 @media screen and (min-width: 1024px) and (max-width: 1440px) {
 
     #gBox {
-        width: 700px;             
+        width: 900px;             
         aspect-ratio: 16 / 9;
     }
 
