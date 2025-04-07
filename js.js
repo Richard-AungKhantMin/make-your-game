@@ -150,6 +150,8 @@ function pause(){
     document.addEventListener("visibilitychange", () =>{
         if (document.hidden && isGameStarted){
             isPaused = true
+            gameOverAudio.pause()
+            gameOverAudio.currentTime = 0
             gameBox.style.backgroundImage =  "none"
             bat.style.display = "none";
             pauseSection.style.display = "block";
@@ -171,6 +173,8 @@ function pause(){
                 } else {
                     cancelAnimationFrame(reqAnimation)
                     pauseSection.style.display = "block";
+                    gameOverAudio.pause()
+                    gameOverAudio.currentTime = 0
                     bat.style.display = "none";
                     isPaused = true; 
                 }
@@ -234,7 +238,11 @@ function moveCats() {
                 lives--;
                 livesHTML.innerText = `Lives: ${lives}`;
                 cat.style.backgroundImage = `url(gameOver.png)`;
-                gameOverAudio.play();
+                if (lives !== 0){
+                    gameOverAudio.currentTime = 0
+                  gameOverAudio.play()
+                }
+                
 
                 cat.dataset.removed = "true";
 
@@ -257,6 +265,10 @@ function moveCats() {
 
 function restart(){
     
+    if (!bananaAudio.ended){
+        bananaAudio.pause()
+        bananaAudio.currentTime = 0
+    }
 score = 0
 lives = 5
 time = 0
@@ -319,6 +331,8 @@ function startGame(){
 
         gameOverInterval = setInterval(()=>{
             if (lives === 0){
+                bananaAudio.play()
+
                 gameOverBox.style.display = "block"
                 isGameStarted = false
                 isPaused = true
@@ -329,6 +343,15 @@ function startGame(){
 
         document.getElementById("r1").addEventListener("click", restart)
         document.getElementById("r2").addEventListener("click", restart)
+
+        document.addEventListener("keydown", (e)=>{
+            if (e.key === "ArrowRight"){
+                speed++
+            }
+            if (e.key === "ArrowLeft" && speed > 2){
+                speed--
+            }
+        })
 
         }); 
 }
