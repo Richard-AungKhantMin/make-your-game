@@ -1,5 +1,6 @@
 const gameBox = document.getElementById("gBox")
 const startBox = document.getElementById("startSection")
+const startButton = document.getElementById("startButton")
 const scoreBox = document.getElementById("score")
 const timeHTML = document.getElementById("time")
 const livesHTML = document.getElementById("lives")
@@ -64,7 +65,7 @@ function checkHit(){
             cancelAnimationFrame(moveCats)
         }else{
             reqAnimation = requestAnimationFrame(moveCats)
-            gameBox.style.backgroundImage =  "none"
+            gameBox.style.backgroundImage =  `url(background.png)`
         }
     }
 
@@ -79,15 +80,20 @@ if (isGameStarted){
     if (e.key.toLowerCase() === "d" && x < gameBox.clientWidth-bat.clientWidth) x += bonkSpeed;
     if (e.key.toLowerCase() === "a" && x > 0) x -= bonkSpeed;
     if (e.key.toLowerCase() === "s" && y < gameBox.clientHeight-(bat.clientHeight/2)) y += bonkSpeed;
-    if (e.key.toLowerCase() === "w" && y > 0) y -= bonkSpeed;
+    if (e.key.toLowerCase() === "w" && y > 0) {
+        if (y-bonkSpeed > 0){
+            y -= bonkSpeed;
+        }else{
+            y = 0
+        }
+        
+    }
 
 }
     
   batMoveInterval = setInterval(() =>{
     let BatX = parseInt(bat.style.left);
     let BatY = parseInt(bat.style.top)
-    const dx = x - BatX;
-    const dy = y - BatY;
 
     const frameSpeed = 1
 
@@ -115,7 +121,7 @@ if (isGameStarted){
         
     if (e.key === "Enter") {
         if (!isPaused){
-            bonkAudio.pause()
+            bonkAudio.currentTime = 0
             bonkAudio.play()
         }
         checkHit();
@@ -141,7 +147,7 @@ function pause(){
   
     resume.addEventListener("click", () => {
         isPaused = false
-        gameBox.style.backgroundImage =  "none"
+        gameBox.style.backgroundImage =   `url(background.png)`
         pauseSection.style.display = "none"
         bat.style.display = "block";
         reqAnimation = requestAnimationFrame(moveCats)
@@ -152,7 +158,9 @@ function pause(){
             isPaused = true
             gameOverAudio.pause()
             gameOverAudio.currentTime = 0
-            gameBox.style.backgroundImage =  "none"
+            tomScreamAudio.pause()
+            tomScreamAudio.currentTime = 0
+            gameBox.style.backgroundImage =  `url(background.png)`
             bat.style.display = "none";
             pauseSection.style.display = "block";
             cancelAnimationFrame(reqAnimation)
@@ -166,7 +174,7 @@ function pause(){
 
                 if (pauseSection.style.display === "block") {
                     reqAnimation = requestAnimationFrame(moveCats);
-                    gameBox.style.backgroundImage =  "none"
+                    gameBox.style.backgroundImage =  `url(background.png)`
                     pauseSection.style.display = "none";
                     bat.style.display = "block";
                     isPaused = false; 
@@ -175,6 +183,8 @@ function pause(){
                     pauseSection.style.display = "block";
                     gameOverAudio.pause()
                     gameOverAudio.currentTime = 0
+                    tomScreamAudio.pause()
+                    tomScreamAudio.currentTime = 0
                     bat.style.display = "none";
                     isPaused = true; 
                 }
@@ -230,10 +240,10 @@ function moveCats() {
     let currentLeft = parseInt(cat.style.left);
 
     if (!isPaused){
-        if (currentLeft < maxRight) {
+        if (currentLeft+speed < maxRight) {
             cat.style.left = `${currentLeft + speed}px`;
         } else {
-
+            cat.style.left = `${maxRight}px`;
             if (!cat.dataset.removed) {
                 lives--;
                 livesHTML.innerText = `Lives: ${lives}`;
@@ -305,7 +315,7 @@ function startGame(){
     controlBat()
 
 
-    startBox.addEventListener("click", function () {
+    startButton.addEventListener("click", function () {
         startBox.style.display = "none";
         isGameStarted = true;
         manageTime()

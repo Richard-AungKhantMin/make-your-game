@@ -1,8 +1,9 @@
 body {
     margin: 0;
     overflow: hidden;
-    background-color: rgb(2, 27, 39);
-    zoom: 1;
+    background-image: url("body.png");
+
+
 }
 
 #gBox {
@@ -10,9 +11,10 @@ body {
     top: 20px;                   
     left: 50%;               
     transform: translateX(-50%);  
-    width: 960px;             
-    height: 540px;            
-    background-color: rgb(248, 250, 225);  
+    width: 1500px;             
+    aspect-ratio: 16 / 9;    
+    background-image: url("background.png") ; 
+
 }
 
 .cat {
@@ -29,8 +31,8 @@ body {
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
-    top: 580px; 
-    color: white;
+    top: 102%; 
+    color: rgb(0, 0, 0);
     font-size: 20px;
 }
 
@@ -38,8 +40,8 @@ body {
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
-    top: 610px; 
-    color: white;
+    top: 105%; 
+    color: rgb(0, 0, 0);
     font-size: 20px;
 }
 
@@ -47,8 +49,8 @@ body {
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
-    top: 640px; 
-    color: white;
+    top: 108%; 
+    color: rgb(0, 0, 0);
     font-size: 20px;
 }
 
@@ -67,11 +69,10 @@ body {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background: rgba(0, 0, 0, 0.8);
-    color: #fff;
+   
+    color: #ffffff;
     padding: 20px 30px;
-    border-radius: 10px;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.7);
+    
     z-index: 11;
     display: none; 
     text-align: center;
@@ -201,3 +202,15 @@ body {
     background-color: #c9302c;
 }
 
+
+@media screen and (min-width: 1024px) and (max-width: 1440px) {
+
+    #gBox {
+        width: 960px;
+        height: 540px;
+    }
+
+    #time, #score, #lives {
+        font-size: 15px;
+    }
+}
